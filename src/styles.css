@@ -1,0 +1,132 @@
+:root {
+  --ink: #1f2430;
+  --soft: #5a6070;
+  --rule: #d8dce3;
+  --paper: #ffffff;
+  --desk: #eef1f5;
+  --grid: #dde3ec;
+  --highlight: #fff08a;
+  --pen: #c0392b;
+  --link: #2451a6;
+  --serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+  --hand: 'Caveat', 'Comic Sans MS', cursive;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font: 18px/1.65 var(--serif);
+  background-color: var(--desk);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--link); text-underline-offset: 2px; }
+b, strong { font-weight: 650; }
+
+.page {
+  max-width: 760px;
+  margin: 40px auto 64px;
+  padding: 56px 64px 40px;
+  background: var(--paper);
+  box-shadow: 0 1px 2px rgb(31 36 48 / 0.08), 0 8px 24px rgb(31 36 48 / 0.06);
+}
+
+/* Title */
+.kicker { margin: 0 0 12px; font-size: 15px; font-style: italic; color: var(--soft); }
+h1 { margin: 0; font-size: 2.35rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+.intro { font-size: 1.1rem; margin: 18px 0 0; }
+.nfa {
+  margin: 24px 0 0;
+  padding: 14px 18px;
+  border: 2px solid var(--pen);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.nfa strong { color: var(--pen); text-transform: uppercase; letter-spacing: 0.04em; font-size: 15px; margin-right: 4px; }
+
+/* Sections */
+section { margin-top: 48px; }
+h2 { font-size: 1.45rem; line-height: 1.25; margin: 0 0 14px; font-weight: 700; }
+.num { color: var(--soft); font-weight: 400; margin-right: 4px; }
+p { margin: 14px 0 0; }
+.small { font-size: 15px; color: var(--soft); }
+mark { background: linear-gradient(transparent 12%, var(--highlight) 12%, var(--highlight) 88%, transparent 88%); color: inherit; padding: 0 3px; }
+
+/* Billing choice */
+.billing { border: 0; padding: 0; margin: 0 0 18px; display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: center; }
+.billing legend { float: left; margin-right: 8px; font-style: italic; color: var(--soft); }
+.billing label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.billing input { accent-color: var(--ink); width: 17px; height: 17px; margin: 0; }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums lining-nums; }
+th, td { text-align: left; padding: 8px 12px 8px 0; vertical-align: baseline; }
+thead th { font-size: 14px; font-weight: 600; color: var(--soft); border-bottom: 2px solid var(--ink); }
+tbody tr { border-bottom: 1px solid var(--rule); }
+.n { text-align: right; white-space: nowrap; }
+thead th:nth-child(n + 3), .rates thead th:nth-child(n + 2) { text-align: right; }
+tbody th { font-weight: 400; }
+
+.answer-wrap { position: relative; }
+.answer { font-size: 17px; border-top: 2px solid var(--ink); }
+.answer thead th { border-top: 0; }
+.answer tbody tr:last-child { border-bottom: 2px solid var(--ink); }
+.answer td { padding-top: 12px; padding-bottom: 12px; }
+.answer .range { white-space: nowrap; }
+.answer mark { font-weight: 650; }
+.scribble {
+  position: absolute;
+  right: -150px;
+  top: 38%;
+  width: 130px;
+  margin: 0;
+  font: 600 26px/1 var(--hand);
+  color: var(--pen);
+  transform: rotate(-6deg);
+}
+
+.formula {
+  margin: 20px 0;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+.rates { max-width: 440px; font-size: 16px; margin-top: 8px; }
+.rates caption { text-align: left; font-size: 15px; color: var(--soft); padding-bottom: 6px; }
+.rates td:last-child { font-weight: 600; }
+
+.examples { margin: 0; padding-left: 22px; }
+.examples li { margin: 6px 0; }
+
+/* Figure */
+.fig { margin: 28px 0 0; }
+.fig svg { width: 100%; height: auto; display: block; }
+.fig-grid { stroke: var(--rule); }
+.fig-tick { fill: var(--soft); font: 12px var(--serif); }
+.fig-estr { fill: none; stroke: #9aa1ad; stroke-width: 1.5; }
+.fig-fund { fill: none; stroke: var(--ink); stroke-width: 2; }
+.fig-dot { fill: var(--ink); }
+.fig figcaption { font-size: 15px; color: var(--soft); margin-top: 8px; }
+
+/* Footnotes */
+.notes { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 14.5px; color: var(--soft); line-height: 1.55; }
+.notes ol { margin: 0; padding-left: 20px; }
+.notes li { margin: 4px 0; }
+.notes b { color: var(--ink); }
+
+@media (max-width: 1100px) {
+  .scribble { position: static; width: auto; margin: 10px 0 0; transform: rotate(-2deg); display: inline-block; }
+}
+@media (max-width: 700px) {
+  body { font-size: 17px; background-size: 18px 18px; }
+  .page { margin: 0; padding: 32px 18px 28px; box-shadow: none; }
+  h1 { font-size: 1.85rem; }
+  .answer-scroll { overflow-x: auto; }
+  .answer { font-size: 15px; min-width: 520px; }
+}

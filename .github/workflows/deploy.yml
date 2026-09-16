@@ -1,0 +1,71 @@
+name: Update rates and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Fidelity's daily price file is usually published around 03:30 UTC.
+    - cron: '15 6 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Yield history lives on the `data` branch so main stays clean.
+      - name: Load stored rates
+        run: |
+          if git fetch --depth=1 origin data; then
+            git show FETCH_HEAD:yield.json > src/data/yield.json
+          fi
+          cp src/data/yield.json "$RUNNER_TEMP/before.json"
+
+      - name: Fetch latest fund yield
+        continue-on-error: true
+        run: npm run update-yield
+
+      - name: Save rates
+        id: save
+        run: |
+          if cmp -s src/data/yield.json "$RUNNER_TEMP/before.json"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          dir="$RUNNER_TEMP/data"
+          mkdir "$dir" && cp src/data/yield.json "$dir/"
+          cd "$dir"
+          git init -q -b data
+          git add yield.json
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "Fund yield data"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" data
+
+      - name: Build
+        if: github.event_name != 'schedule' || steps.save.outputs.changed == 'true'
+        run: npm test && npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'schedule' || steps.save.outputs.changed == 'true'
+        with:
+          path: dist
+
+      - uses: actions/deploy-pages@v4
+        if: github.event_name != 'schedule' || steps.save.outputs.changed == 'true'
